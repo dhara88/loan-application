@@ -1,7 +1,7 @@
 import { html, fixture, expect,aTimeout,oneEvent } from '@open-wc/testing';
 import '../src/LoanBasicDetails/BasicDetails.js';
-import sinon from 'sinon';
-import {stub} from 'sinon';
+import Sinon from 'Sinon';
+// import {stub, spy} from 'sinon';
 
 const basic_input = {
   type:'homeloan',
@@ -9,6 +9,7 @@ const basic_input = {
   range:2
 };
 
+const el = await fixture(html`<basic-details></basic-details>`);
 
 describe('Basic details', () => {
   it('Renders title', async () =>  {
@@ -33,7 +34,7 @@ describe('Basic details', () => {
   });
 
   it('Is button click', async () => {
-    const clickSpy = sinon.spy();
+    const clickSpy = Sinon.spy();
     const el = await fixture(html` <lion-button @click="${clickSpy}">foo</lion-button> `)
     el.click();
     await aTimeout(0);
@@ -50,13 +51,48 @@ describe('Basic details', () => {
     expect(el2.value).to.equal('homeloan'); 
   });
 
-  it('Is capturedetails function called on button click', async () => {
-    const el = await fixture(html`<basic-details><lion-form><form></form></lion-form></basic-details>`);
-    const myFunctionStub = stub(el, '_captureDetails');
-    el.requestUpdate();
-    await el.updateComplete;
-    el.shadowRoot.querySelector('button').click();
-    expect(myFunctionStub).to.have.callCount(0);
-  });
+  // it('Is capturedetails function called on button click', async () => {
+  //   const el = await fixture(html`<basic-details><lion-form><form></form></lion-form></basic-details>`);
+  //   const myFunctionStub = stub(el, '_captureDetails');
+  //   el.requestUpdate();
+  //   await el.updateComplete;
+  //   el.shadowRoot.querySelector('button').click();
+  //   setTimeout(() => expect(myFunctionStub).to.have.callCount(1),1000);
+  // });
 
+  // it('calls dashboard function when a button is clicked', async () => {
+  //   const el = await fixture(html`<basic-details><lion-form><form></form></lion-form></basic-details>`);
+  //   const myFunctionStub = stub(el, '_toDashboard');
+  //   el.requestUpdate();
+  //   await el.updateComplete;
+  //   el.shadowRoot.querySelector('button').click();
+  //   expect(myFunctionStub).to.have.callCount(1);
+  //   });
+
+    // it('check if native submit event called', async () => {
+    //   const submitSpy = spy();
+    //   const el = await fixture(html`
+    //     <lion-form @submit=${submitSpy}>
+    //       <form>
+    //         <lion-button click="_captureDetails">submit</lion-button>
+    //       </form>
+    //     </lion-form>
+    //   `);
+  
+    //   const button = el.querySelector('lion-button');
+    //   button.click();
+    //   expect(submitSpy.callCount).to.equal(1);
+    // });
+    
+    it('check _captureDetails function called', async () => {
+      const submitSpy = Sinon.spy(el,'_captureDetails');
+      const res = el._captureDetails();
+      expect(res).to.equal(undefined);
+    });
+
+    it('check _numToWord function called', async () => {
+      const submitSpy = Sinon.spy(el,'_numToWord');
+      const res = el._numToWord();
+      expect(res).to.equal(undefined);
+    });
 });
